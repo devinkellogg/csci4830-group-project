@@ -20,11 +20,12 @@ public class SimpleFormSearch extends HttpServlet {
    }
 
    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      String keyword = request.getParameter("keyword");
-      search(keyword, response);
+      String food = request.getParameter("food");
+      String restaurant = request.getParameter("restaurant");
+      search(food, restaurant, response);
    }
 
-   void search(String keyword, HttpServletResponse response) throws IOException {
+   void search(String food, String restaurant, HttpServletResponse response) throws IOException {
       response.setContentType("text/html");
       PrintWriter out = response.getWriter();
       String title = "Database Result";
@@ -42,28 +43,43 @@ public class SimpleFormSearch extends HttpServlet {
          DBConnection.getDBConnection();
          connection = DBConnection.connection;
 
-         if (keyword.isEmpty()) {
-            String selectSQL = "SELECT * FROM myTable";
+         if (food.isEmpty() && restaurant.isEmpty()) {
+            String selectSQL = "SELECT * FROM FoodTrackerTable";
             preparedStatement = connection.prepareStatement(selectSQL);
+         } else if(restaurant.isEmpty()){
+            String selectSQL = "SELECT * FROM FoodTrackerTable WHERE FOOD_ORDERED LIKE ?";
+            String theFoodName = food + "%";
+            preparedStatement = connection.prepareStatement(selectSQL);
+            preparedStatement.setString(1, theFoodName);
+         } else if(food.isEmpty()){
+             String selectSQL = "SELECT * FROM FoodTrackerTable WHERE RESTAURANT_ORDERED_FROM LIKE ?";
+             String theRestaurantName = restaurant + "%";
+             preparedStatement = connection.prepareStatement(selectSQL);
+             preparedStatement.setString(1, theRestaurantName);
          } else {
-            String selectSQL = "SELECT * FROM myTable WHERE MYUSER LIKE ?";
-            String theUserName = keyword + "%";
-            preparedStatement = connection.prepareStatement(selectSQL);
-            preparedStatement.setString(1, theUserName);
+             String selectSQL = "SELECT * FROM FoodTrackerTable WHERE FOOD_ORDERED LIKE ? AND RESTAURANT_ORDERED_FROM LIKE ?";
+             String theFoodName = restaurant + "%";
+             String theRestaurantName = restaurant + "%";
+             preparedStatement = connection.prepareStatement(selectSQL);
+             preparedStatement.setString(1, theFoodName);
+             preparedStatement.setString(2, theRestaurantName);
          }
          ResultSet rs = preparedStatement.executeQuery();
 
          while (rs.next()) {
             int id = rs.getInt("id");
-            String userName = rs.getString("myuser").trim();
-            String email = rs.getString("email").trim();
-            String phone = rs.getString("phone").trim();
+            String foodname = rs.getString("food").trim();
+            String price = rs.getString("price").trim();
+            String restaurantname = rs.getString("restaurant").trim();
+            String rating = rs.getString("rating").trim();
 
-            if (keyword.isEmpty() || userName.contains(keyword)) {
+            if (food.isEmpty() || foodname.contains(food)) {
                out.println("ID: " + id + ", ");
-               out.println("User: " + userName + ", ");
-               out.println("Email: " + email + ", ");
-               out.println("Phone: " + phone + "<br>");
+               out.println("Food: " + foodname + ", ");
+               out.println("Price: " + price + ", ");
+               out.println("Restaurant: " + restaurantname + ", ");
+               out.println("Rating: " + rating + ", ");
+               out.println("<br>");
             }
          }
          out.println("<a href=/webproject/simpleFormSearch.html>Search Data</a> <br>");
