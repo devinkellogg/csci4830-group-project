@@ -22,20 +22,22 @@ public class SimpleFormInsert extends HttpServlet {
    }
 
    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-      String userName = request.getParameter("userName");
-      String email = request.getParameter("email");
-      String phone = request.getParameter("phone");
+      String foodOrdered = request.getParameter("foodOrdered");
+      String price = request.getParameter("price");
+      String restaurantOrderedFrom = request.getParameter("restaurantOrderedFrom");
+      String rating = request.getParameter("rating");
 
       Connection connection = null;
-      String insertSql = " INSERT INTO myTable (id, MYUSER, EMAIL, PHONE) values (default, ?, ?, ?)";
+      String insertSql = " INSERT INTO FoodTrackerTable (id, FOOD_ORDERED, PRICE, RESTAURANT_ORDERED_FROM, RATING) values (default, ?, ?, ?, ?)";
 
       try {
          DBConnection.getDBConnection();
          connection = DBConnection.connection;
          PreparedStatement preparedStmt = connection.prepareStatement(insertSql);
-         preparedStmt.setString(1, userName);
-         preparedStmt.setString(2, email);
-         preparedStmt.setString(3, phone);
+         preparedStmt.setString(1, foodOrdered);
+         preparedStmt.setString(2, price);
+         preparedStmt.setString(3, restaurantOrderedFrom);
+         preparedStmt.setString(4, rating);
          preparedStmt.execute();
          connection.close();
       } catch (Exception e) {
@@ -54,9 +56,10 @@ public class SimpleFormInsert extends HttpServlet {
             "<h2 align=\"center\">" + title + "</h2>\n" + //
             "<ul>\n" + //
 
-            "  <li><b>User Name</b>: " + userName + "\n" + //
-            "  <li><b>Email</b>: " + email + "\n" + //
-            "  <li><b>Phone</b>: " + phone + "\n" + //
+            "  <li><b>Food Ordered</b>: " + foodOrdered + "\n" + //
+            "  <li><b>Price</b>: " + price + "\n" + //
+            "  <li><b>Restaurant</b>: " + restaurantOrderedFrom + "\n" + //
+            "  <li><b>Rating</b>: " + rating + "\n" + //
 
             "</ul>\n");
 
