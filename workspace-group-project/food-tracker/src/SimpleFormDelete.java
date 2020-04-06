@@ -54,6 +54,8 @@ public class SimpleFormDelete extends HttpServlet {
 
             "</ul>\n");
 
+      out.println("<a href=/webproject/simpleFormInsert.html>Insert Data</a> <br>");
+      out.println("<a href=/webproject/simpleFormSearch.html>Search Data</a> <br>");
       out.println("<a href=/webproject/simpleFormDelete.html>Delete Data</a> <br>");
       out.println("</body></html>");
    }

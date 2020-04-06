@@ -63,7 +63,10 @@ public class SimpleFormInsert extends HttpServlet {
 
             "</ul>\n");
 
+      out.println("<a href=/webproject/home.html>Food Tracker Home</a> <br>");
+      out.println("<a href=/webproject/simpleFormInsert.html>Insert Data</a> <br>");
       out.println("<a href=/webproject/simpleFormSearch.html>Search Data</a> <br>");
+      out.println("<a href=/webproject/simpleFormDelete.html>Delete Data</a> <br>");
       out.println("</body></html>");
    }
 
