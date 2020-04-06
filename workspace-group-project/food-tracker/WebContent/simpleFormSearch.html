@@ -32,11 +32,13 @@ footer {
 
 <body>
 <header>
-<h1> Search Data </h1>
+<h1> Search Orders </h1>
 </header>
 
 <nav>
-<a href="/webproject/simpleFormInsert.html">Insert Data</a> <br>
+<a href="/webproject/home.html">Food Tracker Home</a> <br>
+<a href="/webproject/simpleFormInsert.html">Insert Order</a> <br>
+<a href="/webproject/simpleFormDelete.html">Delete Order</a> <br>
 </nav>
 
 <section>
@@ -44,7 +46,8 @@ footer {
 	
 	<form action="SimpleFormSearch" method="POST">
 	
-		User Name: <input type="text" name="keyword"> <br />
+		Food Ordered: <input type="text" name="food"> <br />
+		Restaurant Name: <input type="text" name="restaurant"> <br />
 		
 		<input type="submit" value="Search" />
 	</form>

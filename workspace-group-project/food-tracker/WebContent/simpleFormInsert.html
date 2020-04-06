@@ -32,21 +32,24 @@ footer {
 
 <body>
 <header>
-<h1> Insert Data </h1>
+<h1> Insert New Order </h1>
 </header>
 
 <nav>
-<a href="/webproject/simpleFormSearch.html">Search Data</a> <br>
+<a href="/webproject/home.html">Food Tracker Home</a> <br>
+<a href="/webproject/simpleFormSearch.html">Search Order</a> <br>
+<a href="/webproject/simpleFormDelete.html">Delete Order</a> <br>
 </nav>
 
 <section>
-	<h1>User Input</h1>
+	<h1>Input Ordered Meal</h1>
 	
 	<form action="SimpleFormInsert" method="POST">
 	
-		User Name: <input type="text" name="userName"> <br />
-		Email: <input type="text" name="email"> <br />
-		Phone: <input type="text" name="phone"> <br />
+		Food Ordered: <input type="text" name="foodOrdered"> <br />
+		Price: <input type="text" name="price"> <br />
+		Restaurant Ordered From: <input type="text" name="restaurantOrderedFrom"> <br />
+		Rating: <input type="text" name="rating"> <br />
 		
 		<input type="submit" value="Submit" />
 	</form>
