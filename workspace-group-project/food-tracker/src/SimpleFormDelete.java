@@ -54,10 +54,10 @@ public class SimpleFormDelete extends HttpServlet {
 
             "</ul>\n");
 
-      out.println("<a href=/webproject/home.html>Food Tracker Home</a> <br>");
-      out.println("<a href=/webproject/simpleFormInsert.html>Insert Order</a> <br>");
-      out.println("<a href=/webproject/simpleFormSearch.html>Search Order</a> <br>");
-      out.println("<a href=/webproject/simpleFormDelete.html>Delete Order</a> <br>");
+      out.println("<a href=/food-tracker/home.html>Food Tracker Home</a> <br>");
+      out.println("<a href=/food-tracker/simpleFormInsert.html>Insert Order</a> <br>");
+      out.println("<a href=/food-tracker/simpleFormSearch.html>Search Order</a> <br>");
+      out.println("<a href=/food-tracker/simpleFormDelete.html>Delete Order</a> <br>");
       out.println("</body></html>");
    }
 
