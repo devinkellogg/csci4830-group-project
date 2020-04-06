@@ -68,9 +68,9 @@ public class SimpleFormSearch extends HttpServlet {
 
          while (rs.next()) {
             int id = rs.getInt("id");
-            String foodname = rs.getString("food").trim();
+            String foodname = rs.getString("food_ordered").trim();
             String price = rs.getString("price").trim();
-            String restaurantname = rs.getString("restaurant").trim();
+            String restaurantname = rs.getString("restaurant_ordered_from").trim();
             String rating = rs.getString("rating").trim();
 
             if (food.isEmpty() || foodname.contains(food)) {
