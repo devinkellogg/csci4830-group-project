@@ -1,3 +1,4 @@
+package main;
 
 /**
  * @file SimpleFormInsert.java
@@ -6,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -20,7 +22,20 @@ public class SimpleFormInsert extends HttpServlet {
    public SimpleFormInsert() {
       super();
    }
-
+   
+   protected void dbHelper(Connection connection, String foodOrdered, String price, String restaurantOrderedFrom, String rating) throws SQLException {
+	   DBConnection.getDBConnection();
+       connection = DBConnection.connection;
+       String insertSql = " INSERT INTO FoodTrackerTable (id, FOOD_ORDERED, PRICE, RESTAURANT_ORDERED_FROM, RATING) values (default, ?, ?, ?, ?)";
+       PreparedStatement preparedStmt = connection.prepareStatement(insertSql);
+       preparedStmt.setString(1, foodOrdered);
+       preparedStmt.setString(2, price);
+       preparedStmt.setString(3, restaurantOrderedFrom);
+       preparedStmt.setString(4, rating);
+       preparedStmt.execute();
+       connection.close();
+   }
+   
    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       String foodOrdered = request.getParameter("foodOrdered");
       String price = request.getParameter("price");
@@ -28,18 +43,10 @@ public class SimpleFormInsert extends HttpServlet {
       String rating = request.getParameter("rating");
 
       Connection connection = null;
-      String insertSql = " INSERT INTO FoodTrackerTable (id, FOOD_ORDERED, PRICE, RESTAURANT_ORDERED_FROM, RATING) values (default, ?, ?, ?, ?)";
+  
       boolean error = false;
       try {
-         DBConnection.getDBConnection();
-         connection = DBConnection.connection;
-         PreparedStatement preparedStmt = connection.prepareStatement(insertSql);
-         preparedStmt.setString(1, foodOrdered);
-         preparedStmt.setString(2, price);
-         preparedStmt.setString(3, restaurantOrderedFrom);
-         preparedStmt.setString(4, rating);
-         preparedStmt.execute();
-         connection.close();
+         dbHelper(connection, foodOrdered, price, restaurantOrderedFrom, rating);
       } catch (Exception e) {
     	  error = true;
     	  e.printStackTrace();
@@ -50,7 +57,6 @@ public class SimpleFormInsert extends HttpServlet {
 	      response.setContentType("text/html");
 	      PrintWriter out = response.getWriter();
 	      String title = "New Order Created With the Following Information!";
-	      String docType = "<!doctype html public \"-//w3c//dtd html 4.0 " + "transitional//en\">\n";
 	      out.println("<html>\r\n" + 
 	      		"<head>\r\n" + 
 	      		"<style>\r\n" + 
@@ -123,7 +129,6 @@ public class SimpleFormInsert extends HttpServlet {
     	  response.setContentType("text/html");
 	      PrintWriter out = response.getWriter();
 	      String title = "There was an issue with the data you inputted!\nPlease try again.";
-	      String docType = "<!doctype html public \"-//w3c//dtd html 4.0 " + "transitional//en\">\n";
 	      out.println("<html>\r\n" + 
 	      		"<head>\r\n" + 
 	      		"<style>\r\n" + 
@@ -191,5 +196,4 @@ public class SimpleFormInsert extends HttpServlet {
    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       doGet(request, response);
    }
-
 }
