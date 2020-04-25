@@ -37,18 +37,18 @@ public class SimpleFormSearch extends HttpServlet {
             preparedStatement = connection.prepareStatement(selectSQL);
         } else if(restaurant.isEmpty()){
         	String selectSQL = "SELECT * FROM FoodTrackerTable WHERE FOOD_ORDERED LIKE ?";
-            String theFoodName = food + "%";
+            String theFoodName = "%" + food + "%";
             preparedStatement = connection.prepareStatement(selectSQL);
             preparedStatement.setString(1, theFoodName);
         } else if(food.isEmpty()){
              String selectSQL = "SELECT * FROM FoodTrackerTable WHERE RESTAURANT_ORDERED_FROM LIKE ?";
-             String theRestaurantName = restaurant + "%";
+             String theRestaurantName = "%" + restaurant + "%";
              preparedStatement = connection.prepareStatement(selectSQL);
              preparedStatement.setString(1, theRestaurantName);
         } else {
              String selectSQL = "SELECT * FROM FoodTrackerTable WHERE FOOD_ORDERED LIKE ? AND RESTAURANT_ORDERED_FROM LIKE ?";
-             String theFoodName = restaurant + "%";
-             String theRestaurantName = restaurant + "%";
+             String theFoodName = "%" + food + "%";
+             String theRestaurantName = "%" + restaurant + "%";
              preparedStatement = connection.prepareStatement(selectSQL);
              preparedStatement.setString(1, theFoodName);
              preparedStatement.setString(2, theRestaurantName);
@@ -129,14 +129,14 @@ public class SimpleFormSearch extends HttpServlet {
             String restaurantname = rs.getString("restaurant_ordered_from").trim();
             String rating = rs.getString("rating").trim();
 
-            if (food.isEmpty() || foodname.contains(food)) {
-               out.println("ID: " + id + ", ");
-               out.println("Food: " + foodname + ", ");
-               out.println("Price: " + price + ", ");
-               out.println("Restaurant: " + restaurantname + ", ");
-               out.println("Rating: " + rating);
-               out.println("<br>");
-            }
+     
+           out.println("ID: " + id + ", ");
+           out.println("Food: " + foodname + ", ");
+           out.println("Price: " + price + ", ");
+           out.println("Restaurant: " + restaurantname + ", ");
+           out.println("Rating: " + rating);
+           out.println("<br>");
+            
          }
          if (!foundEntry) {
     		 out.println("<h2 align=\"center\">" + title + "</h2>\n");
