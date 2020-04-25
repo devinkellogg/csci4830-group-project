@@ -25,42 +25,45 @@ public class SimpleFormSearch extends HttpServlet {
       String restaurant = request.getParameter("restaurant");
       search(food, restaurant, response);
    }
-
-   void search(String food, String restaurant, HttpServletResponse response) throws IOException {
-
-      Connection connection = null;
-      PreparedStatement preparedStatement = null;
-      try {
-         DBConnection.getDBConnection();
-         connection = DBConnection.connection;
-
-         if (food.isEmpty() && restaurant.isEmpty()) {
-            String selectSQL = "SELECT * FROM FoodTrackerTable";
+   
+   protected ResultSet dbHelper(String food, String restaurant) throws Exception {
+	   	Connection connection = null;
+	   	PreparedStatement preparedStatement = null;
+        DBConnection.getDBConnection();
+        connection = DBConnection.connection;
+        
+        if (food.isEmpty() && restaurant.isEmpty()) {
+        	String selectSQL = "SELECT * FROM FoodTrackerTable";
             preparedStatement = connection.prepareStatement(selectSQL);
-         } else if(restaurant.isEmpty()){
-            String selectSQL = "SELECT * FROM FoodTrackerTable WHERE FOOD_ORDERED LIKE ?";
+        } else if(restaurant.isEmpty()){
+        	String selectSQL = "SELECT * FROM FoodTrackerTable WHERE FOOD_ORDERED LIKE ?";
             String theFoodName = food + "%";
             preparedStatement = connection.prepareStatement(selectSQL);
             preparedStatement.setString(1, theFoodName);
-         } else if(food.isEmpty()){
+        } else if(food.isEmpty()){
              String selectSQL = "SELECT * FROM FoodTrackerTable WHERE RESTAURANT_ORDERED_FROM LIKE ?";
              String theRestaurantName = restaurant + "%";
              preparedStatement = connection.prepareStatement(selectSQL);
              preparedStatement.setString(1, theRestaurantName);
-         } else {
+        } else {
              String selectSQL = "SELECT * FROM FoodTrackerTable WHERE FOOD_ORDERED LIKE ? AND RESTAURANT_ORDERED_FROM LIKE ?";
              String theFoodName = restaurant + "%";
              String theRestaurantName = restaurant + "%";
              preparedStatement = connection.prepareStatement(selectSQL);
              preparedStatement.setString(1, theFoodName);
              preparedStatement.setString(2, theRestaurantName);
-         }
-         ResultSet rs = preparedStatement.executeQuery();
+        }
+        return preparedStatement.executeQuery();
+   }
+   
+   void search(String food, String restaurant, HttpServletResponse response) throws IOException {
+      try {
+         
+         ResultSet rs = dbHelper(food, restaurant);
      
     	 response.setContentType("text/html");
 	     PrintWriter out = response.getWriter();
 	     String title = "There were no entries found for your search. Please try again.";
-	     String docType = "<!doctype html public \"-//w3c//dtd html 4.0 " + "transitional//en\">\n";
 	     out.println("<html>\r\n" + 
 	    		"<head>\r\n" + 
 	      		"<style>\r\n" + 
@@ -117,7 +120,7 @@ public class SimpleFormSearch extends HttpServlet {
          while (rs.next()) {
         	 if (!foundEntry) {
         		 foundEntry = true;
-        		 title = "Orders Found!";
+        		 title = "Orders found!";
         		 out.println("<h2 align=\"center\">" + title + "</h2>\n");
         	 }
             int id = rs.getInt("id");
@@ -146,26 +149,12 @@ public class SimpleFormSearch extends HttpServlet {
 		      		"</body>\r\n" + 
 		      		"</html>");
          rs.close();
-         preparedStatement.close();
-         connection.close();
          
       } catch (SQLException se) {
          se.printStackTrace();
       } catch (Exception e) {
          e.printStackTrace();
-      } finally {
-         try {
-            if (preparedStatement != null)
-               preparedStatement.close();
-         } catch (SQLException se2) {
-         }
-         try {
-            if (connection != null)
-               connection.close();
-         } catch (SQLException se) {
-            se.printStackTrace();
-         }
-      }
+      } 
    }
 
    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

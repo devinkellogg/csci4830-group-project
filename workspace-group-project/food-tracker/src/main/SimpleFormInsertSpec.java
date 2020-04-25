@@ -1,7 +1,5 @@
 package main;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
@@ -18,7 +16,7 @@ class SimpleFormInsertSpec {
 	@Test
 	void testInvalidInput() throws IOException, SQLException, ServletException {
 		PrintWriter out = Mockito.mock(PrintWriter.class);
-		
+	
 		HttpServletResponse response = Mockito.mock(HttpServletResponse.class);
 		Mockito.when(response.getWriter()).thenReturn(out);
 		

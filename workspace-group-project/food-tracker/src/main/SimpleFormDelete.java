@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -22,45 +23,50 @@ public class SimpleFormDelete extends HttpServlet {
    public SimpleFormDelete() {
       super();
    }
-
+   
+   protected boolean dbHelper(String deleteId) throws Exception {
+	   System.out.println("THIS SHOULDN'T PRINT IF IT'S MOCKING");
+	   int numOrders = 0;
+	   int numOrdersAfter = 0;
+	   DBConnection.getDBConnection();
+	   Connection connection = null;
+	   String deleteSql = " DELETE FROM FoodTrackerTable WHERE id = ?";
+       connection = DBConnection.connection;
+       String selectSQL = "SELECT * FROM FoodTrackerTable";
+       PreparedStatement statementForNumOrders = connection.prepareStatement(selectSQL);
+       ResultSet rs = statementForNumOrders.executeQuery();
+       while (rs.next()) {
+      	 numOrders++;
+       }
+       PreparedStatement preparedStmt = connection.prepareStatement(deleteSql);
+       preparedStmt.setString(1, deleteId);
+       preparedStmt.execute();
+       rs = statementForNumOrders.executeQuery();
+       while (rs.next()) {
+      	 numOrdersAfter++;
+       }
+       connection.close();
+       return numOrders > numOrdersAfter;
+   }
+   
    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
       String deleteId = request.getParameter("deleteID");
-
-      Connection connection = null;
-      String deleteSql = " DELETE FROM FoodTrackerTable WHERE id = ?";
-      int numOrders = 0;
-      int numOrdersAfter = 0;
-
+      boolean deleted = false;
       try {
-         DBConnection.getDBConnection();
-         connection = DBConnection.connection;
-         String selectSQL = "SELECT * FROM FoodTrackerTable";
-         PreparedStatement statementForNumOrders = connection.prepareStatement(selectSQL);
-         ResultSet rs = statementForNumOrders.executeQuery();
-         while (rs.next()) {
-        	 numOrders++;
-         }
-         PreparedStatement preparedStmt = connection.prepareStatement(deleteSql);
-         preparedStmt.setString(1, deleteId);
-         preparedStmt.execute();
-         rs = statementForNumOrders.executeQuery();
-         while (rs.next()) {
-        	 numOrdersAfter++;
-         }
-         connection.close();
+         deleted = dbHelper(deleteId);
       } catch (Exception e) {
          e.printStackTrace();
       }
       String title;
-      if (numOrders > numOrdersAfter) {
-    	  title = "Deletion was successful";
+      if (deleted) {
+    	  System.out.println("Test");
+    	  title = "Deletion was successful!";
       }
       else {
     	  title = "Nothing with the given ID was found!";
       }
       response.setContentType("text/html");
       PrintWriter out = response.getWriter();
-      String docType = "<!doctype html public \"-//w3c//dtd html 4.0 " + "transitional//en\">\n";
       out.println("<html>\r\n" + 
       		"<head>\r\n" + 
       		"<style>\r\n" + 

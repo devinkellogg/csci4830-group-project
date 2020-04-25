@@ -41,6 +41,8 @@ public class SimpleFormInsert extends HttpServlet {
       String price = request.getParameter("price");
       String restaurantOrderedFrom = request.getParameter("restaurantOrderedFrom");
       String rating = request.getParameter("rating");
+      rating = (Integer.parseInt(rating) > 5) ? "5" : rating;
+      rating = (Integer.parseInt(rating) < 1) ? "1" : rating;
 
       Connection connection = null;
   
