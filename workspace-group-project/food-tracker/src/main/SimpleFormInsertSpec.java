@@ -24,11 +24,11 @@ class SimpleFormInsertSpec {
 		Mockito.when(request.getParameter("foodOrdered")).thenReturn("test");
 		Mockito.when(request.getParameter("price")).thenReturn("test");
 		Mockito.when(request.getParameter("restaurantOrderedFrom")).thenReturn("test");
-		Mockito.when(request.getParameter("rating")).thenReturn("test");
+		Mockito.when(request.getParameter("rating")).thenReturn("1");
 		
 		SimpleFormInsert sfi = new SimpleFormInsert();
 		SimpleFormInsert sfi1 = Mockito.spy(sfi);
-		Mockito.doThrow(new SQLException()).when(sfi1).dbHelper(null, "test", "test", "test", "test");
+		Mockito.doThrow(new SQLException()).when(sfi1).dbHelper(null, "test", "test", "test", "1");
 		
 		sfi1.doGet(request, response);
 		Mockito.verify(out).println("<html>\r\n" + 
@@ -104,11 +104,11 @@ class SimpleFormInsertSpec {
 		Mockito.when(request.getParameter("foodOrdered")).thenReturn("test");
 		Mockito.when(request.getParameter("price")).thenReturn("test");
 		Mockito.when(request.getParameter("restaurantOrderedFrom")).thenReturn("test");
-		Mockito.when(request.getParameter("rating")).thenReturn("test");
+		Mockito.when(request.getParameter("rating")).thenReturn("1");
 		
 		SimpleFormInsert sfi = new SimpleFormInsert();
 		SimpleFormInsert sfi1 = Mockito.spy(sfi);
-		Mockito.doNothing().when(sfi1).dbHelper(null, "test", "test", "test", "test");
+		Mockito.doNothing().when(sfi1).dbHelper(null, "test", "test", "test", "1");
 		
 		sfi1.doGet(request, response);
 		Mockito.verify(out).println("<html>\r\n" + 
@@ -168,7 +168,7 @@ class SimpleFormInsertSpec {
 	            "  <b>Food Ordered</b>: test<br>\n" + //
 	            "  <b>Price</b>: test<br>\n" + //
 	            "  <b>Restaurant</b>: test<br>\n" + //
-	            "  <b>Rating</b>: test<br>\n" + //
+	            "  <b>Rating</b>: 1<br>\n" + //
 	
 	            "</ul>\n" +
 	      		"</section>\r\n" + 
